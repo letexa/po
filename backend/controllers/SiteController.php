@@ -60,6 +60,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = '@backend/views/layouts/base.php';
         return $this->render('index');
     }
 
