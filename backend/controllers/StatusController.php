@@ -31,7 +31,7 @@ class StatusController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -40,8 +40,20 @@ class StatusController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'logout' => ['post'],
                 ],
+            ],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
             ],
         ];
     }
@@ -62,19 +74,6 @@ class StatusController extends Controller
     }
 
     /**
-     * Displays a single Status model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
      * Creates a new Status model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -84,7 +83,7 @@ class StatusController extends Controller
         $model = new Status();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['/status', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -104,7 +103,7 @@ class StatusController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['/status', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -123,7 +122,7 @@ class StatusController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/status']);
     }
 
     /**

@@ -14,6 +14,7 @@ class BaseAsset extends AssetBundle
     public $css = [
         'css/font-glyphicons.css',
         'css/sb-admin-2.min.css',
+        'css/custom.css'
     ];
     public $js = [
     ];

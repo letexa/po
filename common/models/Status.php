@@ -33,6 +33,7 @@ class Status extends \yii\db\ActiveRecord
         return [
             [['alias', 'name'], 'required'],
             [['alias', 'name'], 'string', 'max' => 255],
+            ['alias', 'unique']
         ];
     }
 

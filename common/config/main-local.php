@@ -9,13 +9,6 @@ return [
             'password' => $_ENV['DB_PASSWORD'],
             'charset' => 'utf8',
         ],
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-                
-            ],
-        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
