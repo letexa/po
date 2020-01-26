@@ -46,9 +46,9 @@ class StatusLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'old_status_id' => 'Old Status ID',
-            'new_status_id' => 'New Status ID',
-            'updatedate' => 'Updatedate',
+            'old_status_id' => 'Старый статус',
+            'new_status_id' => 'Новый статус',
+            'updatedate' => 'Дата обновления',
         ];
     }
 

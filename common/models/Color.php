@@ -32,6 +32,7 @@ class Color extends \yii\db\ActiveRecord
         return [
             [['alias', 'name'], 'required'],
             [['alias', 'name'], 'string', 'max' => 255],
+            ['alias', 'unique']
         ];
     }
 
@@ -43,7 +44,7 @@ class Color extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'alias' => 'Alias',
-            'name' => 'Name',
+            'name' => 'Название',
         ];
     }
 

@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Status;
+use common\models\Color;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -11,9 +11,9 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
 /**
- * StatusController implements the CRUD actions for Status model.
+ * ColorController implements the CRUD actions for Color model.
  */
-class StatusController extends Controller
+class ColorController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -45,25 +45,13 @@ class StatusController extends Controller
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
-
-    /**
-     * Lists all Status models.
+     * Lists all Color models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Status::find(),
+            'query' => Color::find(),
         ]);
 
         return $this->render('index', [
@@ -72,16 +60,16 @@ class StatusController extends Controller
     }
 
     /**
-     * Creates a new Status model.
+     * Creates a new Color model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Status();
+        $model = new Color();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['/status', 'id' => $model->id]);
+            return $this->redirect(['/color', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -90,7 +78,7 @@ class StatusController extends Controller
     }
 
     /**
-     * Updates an existing Status model.
+     * Updates an existing Color model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -101,7 +89,7 @@ class StatusController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['/status', 'id' => $model->id]);
+            return $this->redirect(['/color', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -110,7 +98,7 @@ class StatusController extends Controller
     }
 
     /**
-     * Deletes an existing Status model.
+     * Deletes an existing Color model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -120,19 +108,19 @@ class StatusController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['/status']);
+        return $this->redirect(['/color']);
     }
 
     /**
-     * Finds the Status model based on its primary key value.
+     * Finds the Color model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Status the loaded model
+     * @return Color the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Status::findOne($id)) !== null) {
+        if (($model = Color::findOne($id)) !== null) {
             return $model;
         }
 
