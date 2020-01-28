@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
+use kartik\date\DatePicker;
+
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\StatusLogSearch */
@@ -20,14 +23,31 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'old_status_id',
-            'new_status_id',
-            'updatedate',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'attribute' => 'id',
+                'options' => [
+                    'style' => 'width: 150px;',
+                ],
+            ],
+            [
+                'attribute' => 'old_status_id',
+                'filter' => ArrayHelper::map(\common\models\Status::find()->select(['id', 'name'])->orderBy('name')->all(), 'id', 'name'),
+                'filterInputOptions' => ['class' => 'form-control form-control-sm']
+            ],
+            [
+                'attribute' => 'new_status_id',
+                'filter' => ArrayHelper::map(\common\models\Status::find()->select(['id', 'name'])->orderBy('name')->all(), 'id', 'name'),
+                'filterInputOptions' => ['class' => 'form-control form-control-sm']
+            ],
+            [
+                'attribute' => 'updatedate',
+                'filter' => \yii\jui\DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'updatedate',
+                    'language' => 'ru', 
+                    'dateFormat' => 'dd-MM-yyyy'
+                ]),
+            ], 
         ],
     ]); ?>
 

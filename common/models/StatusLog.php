@@ -17,6 +17,7 @@ use Yii;
  */
 class StatusLog extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
