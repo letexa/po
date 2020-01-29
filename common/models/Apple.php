@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\StatusLog;
 
 /**
  * This is the model class for table "apple".
@@ -20,11 +21,43 @@ use Yii;
 class Apple extends \yii\db\ActiveRecord
 {
     /**
+     * Период (в месяцах) до сегодняшнего дня, в течение которого может появится яблоко
+     */
+    const PERIOD = 1; // месяц
+
+    /**
+     * Старые данные модели
+     *
+     * @var [type]
+     */
+    public $oldRecord;
+
+    /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'apple';
+    }
+
+    public function afterFind()
+    {
+        $this->oldRecord = clone $this;
+        return parent::afterFind();     
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        /** Запись в лог, если статус был обновлен */ 
+        if ($this->oldRecord && $this->oldRecord->status_id != $this->status_id) {
+            $log = new StatusLog();
+            $log->old_status_id = $this->oldRecord->status_id;
+            $log->new_status_id = $this->status_id;
+            $log->save();
+        }
+
     }
 
     /**
@@ -33,11 +66,12 @@ class Apple extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'color_id', 'status_id'], 'required'],
-            [['id', 'color_id', 'status_id', 'size'], 'integer'],
+            [['color_id', 'status_id'], 'required'],
+            [['color_id', 'status_id'], 'integer'],
             [['createdate', 'updatedate'], 'safe'],
             [['color_id'], 'exist', 'skipOnError' => true, 'targetClass' => Color::className(), 'targetAttribute' => ['color_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
+            [['size'], 'number', 'integerOnly' => TRUE, 'min' => 1, 'max' => 100]
         ];
     }
 
@@ -48,11 +82,11 @@ class Apple extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'color_id' => 'Color ID',
-            'status_id' => 'Status ID',
-            'size' => 'Size',
-            'createdate' => 'Createdate',
-            'updatedate' => 'Updatedate',
+            'color_id' => 'Цвет',
+            'status_id' => 'Статус',
+            'size' => 'Целостность яблока',
+            'createdate' => 'Дата появления',
+            'updatedate' => 'Дата обновления',
         ];
     }
 

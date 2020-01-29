@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
-use kartik\date\DatePicker;
 
 
 /* @var $this yii\web\View */
@@ -32,12 +31,18 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'old_status_id',
                 'filter' => ArrayHelper::map(\common\models\Status::find()->select(['id', 'name'])->orderBy('name')->all(), 'id', 'name'),
-                'filterInputOptions' => ['class' => 'form-control form-control-sm']
+                'filterInputOptions' => ['class' => 'form-control form-control-sm'],
+                'value' => function($data) {
+                    return isset($data->oldStatus->name) ? $data->oldStatus->name : null; 
+                },
             ],
             [
                 'attribute' => 'new_status_id',
                 'filter' => ArrayHelper::map(\common\models\Status::find()->select(['id', 'name'])->orderBy('name')->all(), 'id', 'name'),
-                'filterInputOptions' => ['class' => 'form-control form-control-sm']
+                'filterInputOptions' => ['class' => 'form-control form-control-sm'],
+                'value' => function($data) {
+                    return isset($data->newStatus->name) ? $data->newStatus->name : null; 
+                },
             ],
             [
                 'attribute' => 'updatedate',
@@ -45,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $searchModel,
                     'attribute' => 'updatedate',
                     'language' => 'ru', 
-                    'dateFormat' => 'dd-MM-yyyy'
+                    'dateFormat' => 'yyyy-MM-dd'
                 ]),
             ], 
         ],

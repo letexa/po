@@ -4,12 +4,12 @@ namespace backend\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\StatusLog;
+use common\models\Apple;
 
 /**
- * StatusLogSearch represents the model behind the search form of `common\models\StatusLog`.
+ * AppleSearch represents the model behind the search form of `common\models\Apple`.
  */
-class StatusLogSearch extends StatusLog
+class AppleSearch extends Apple
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class StatusLogSearch extends StatusLog
     public function rules()
     {
         return [
-            [['id', 'old_status_id', 'new_status_id'], 'integer'],
-            [['updatedate'], 'safe'],
+            [['id', 'color_id', 'status_id', 'size'], 'integer'],
+            [['createdate', 'updatedate'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class StatusLogSearch extends StatusLog
      */
     public function search($params)
     {
-        $query = StatusLog::find();
+        $query = Apple::find();
 
         // add conditions that should always apply here
 
@@ -59,10 +59,12 @@ class StatusLogSearch extends StatusLog
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'old_status_id' => $this->old_status_id,
-            'new_status_id' => $this->new_status_id,
+            'color_id' => $this->color_id,
+            'status_id' => $this->status_id,
+            'size' => $this->size,
         ]);
 
+        $query->andFilterWhere(['like', 'createdate', $this->createdate]);
         $query->andFilterWhere(['like', 'updatedate', $this->updatedate]);
 
         return $dataProvider;

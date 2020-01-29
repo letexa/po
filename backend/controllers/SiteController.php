@@ -5,6 +5,7 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use common\models\LoginForm;
 
 /**
@@ -63,7 +64,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $this->layout = '@backend/views/layouts/base.php';
-        return $this->render('index');
+        Yii::$app->response->redirect(Url::to('apple'));
     }
 
     /**

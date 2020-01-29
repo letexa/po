@@ -19,7 +19,7 @@ class m200125_161022_apple extends Migration
         $this->createTable(
             '{{%apple}}',
             [
-                'id'=> $this->integer(11)->notNull(),
+                'id'=> $this->primaryKey(11),
                 'color_id'=> $this->integer(11)->notNull(),
                 'status_id'=> $this->integer(11)->notNull(),
                 'size'=> $this->integer(3)->notNull()->defaultValue(100),

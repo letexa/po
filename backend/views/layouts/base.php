@@ -51,7 +51,7 @@ BaseAsset::register($this);
       <hr class="sidebar-divider my-0">
 
       <li class="nav-item active">
-        <a class="nav-link" href="/">
+        <a class="nav-link" href="/apple">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Яблоки</span></a>
       </li>
