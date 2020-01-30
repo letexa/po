@@ -21,7 +21,7 @@ use yii\helpers\ArrayHelper;
         );
     ?>
 
-    <?= $form->field($model, 'size')->textInput(['value' => 100]) ?>
+    <?= $form->field($model, 'size')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>

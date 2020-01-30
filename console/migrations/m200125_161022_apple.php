@@ -22,7 +22,7 @@ class m200125_161022_apple extends Migration
                 'id'=> $this->primaryKey(11),
                 'color_id'=> $this->integer(11)->notNull(),
                 'status_id'=> $this->integer(11)->notNull(),
-                'size'=> $this->integer(3)->notNull()->defaultValue(100),
+                'size'=> $this->decimal(5,2)->notNull()->defaultValue(100),
                 'createdate'=> $this->datetime()->notNull()->defaultExpression("CURRENT_TIMESTAMP"),
                 'updatedate'=> $this->datetime()->notNull()->defaultExpression("CURRENT_TIMESTAMP"),
             ],$tableOptions

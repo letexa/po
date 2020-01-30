@@ -17,9 +17,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'old_status_id') ?>
+    <?= $form->field($model, 'apple_id') ?>
 
-    <?= $form->field($model, 'new_status_id') ?>
+    <?= $form->field($model, 'status_id') ?>
 
     <?= $form->field($model, 'updatedate') ?>
 

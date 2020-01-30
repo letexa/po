@@ -2,6 +2,7 @@
 
 use yii\db\Schema;
 use yii\db\Migration;
+use common\models\Status;
 
 class m200125_163619_statusDataInsert extends Migration
 {
@@ -18,24 +19,19 @@ class m200125_163619_statusDataInsert extends Migration
                            ["id", "alias", "name"],
                             [
     [
-        'id' => '1',
+        'id' => Status::HANGING_STATUS,
         'alias' => 'hanging',
         'name' => 'на дереве',
     ],
     [
-        'id' => '2',
+        'id' => Status::FALL_STATUS,
         'alias' => 'fall',
         'name' => 'упало',
     ],
     [
-        'id' => '3',
+        'id' => Status::ROTTEN_STATUS,
         'alias' => 'rotten',
         'name' => 'гнилое',
-    ],
-    [
-        'id' => '4',
-        'alias' => 'eaten',
-        'name' => 'съедено',
     ],
 ]
         );

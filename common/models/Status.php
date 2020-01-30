@@ -17,6 +17,12 @@ use Yii;
  */
 class Status extends \yii\db\ActiveRecord
 {
+    const HANGING_STATUS = 1;
+
+    const FALL_STATUS = 2;
+
+    const ROTTEN_STATUS = 3;
+
     /**
      * {@inheritdoc}
      */

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\Apple;
 use common\models\Color;
+use common\models\Status;
 use backend\models\search\AppleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -66,13 +67,10 @@ class AppleController extends Controller
         $model->createdate = random_int($date_from->format('U'), $date_to->format('U'));
         $model->createdate = date('Y-m-d H:i:s', $model->createdate);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['/apple']);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        $model->status_id = Status::HANGING_STATUS;
+        $model->save();
+        
+        return $this->redirect(['/apple']);
     }
 
     /**
@@ -86,7 +84,12 @@ class AppleController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if (!$model->size) {
+                $model->delete();
+            } else {
+                $model->save();
+            }
             return $this->redirect(['/apple']);
         }
 

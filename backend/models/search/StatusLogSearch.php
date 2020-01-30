@@ -17,7 +17,7 @@ class StatusLogSearch extends StatusLog
     public function rules()
     {
         return [
-            [['id', 'old_status_id', 'new_status_id'], 'integer'],
+            [['id', 'apple_id', 'status_id'], 'integer'],
             [['updatedate'], 'safe'],
         ];
     }
@@ -59,8 +59,8 @@ class StatusLogSearch extends StatusLog
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'old_status_id' => $this->old_status_id,
-            'new_status_id' => $this->new_status_id,
+            'apple_id' => $this->apple_id,
+            'status_id' => $this->status_id,
         ]);
 
         $query->andFilterWhere(['like', 'updatedate', $this->updatedate]);

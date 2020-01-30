@@ -32,6 +32,12 @@ class Apple extends \yii\db\ActiveRecord
      */
     public $oldRecord;
 
+    public function __construct()
+    {
+        parent::__construct();
+
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -53,8 +59,8 @@ class Apple extends \yii\db\ActiveRecord
         /** Запись в лог, если статус был обновлен */ 
         if ($this->oldRecord && $this->oldRecord->status_id != $this->status_id) {
             $log = new StatusLog();
-            $log->old_status_id = $this->oldRecord->status_id;
-            $log->new_status_id = $this->status_id;
+            $log->status_id = $this->status_id;
+            $log->apple_id = $this->id;
             $log->save();
         }
 
@@ -71,7 +77,9 @@ class Apple extends \yii\db\ActiveRecord
             [['createdate', 'updatedate'], 'safe'],
             [['color_id'], 'exist', 'skipOnError' => true, 'targetClass' => Color::className(), 'targetAttribute' => ['color_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
-            [['size'], 'number', 'integerOnly' => TRUE, 'min' => 1, 'max' => 100]
+            [['size'], 'number', 'integerOnly' => FALSE, 'min' => 0, 'max' => 100.00],
+            [['status_id'], 'statusValidate'],
+            [['size'], 'sizeValidate'],
         ];
     }
 
@@ -108,5 +116,52 @@ class Apple extends \yii\db\ActiveRecord
     public function getStatus()
     {
         return $this->hasOne(Status::className(), ['id' => 'status_id']);
+    }
+
+    /**
+     * Валидация для статусов
+     *
+     * @param string $attribute
+     * @return void
+     */
+    public function statusValidate($attribute)
+    {
+        if (!$this->oldRecord) {
+            return true;
+        }
+
+        if ($this->oldRecord->status_id == status::HANGING_STATUS && $this->status_id == Status::ROTTEN_STATUS) {
+            $this->addError($attribute, 'Висящее на дерево яблоко не может сгнить');
+        }
+
+        if ($this->oldRecord->status_id == status::FALL_STATUS && $this->status_id == Status::HANGING_STATUS) {
+            $this->addError($attribute, 'Яблоко уже не вернуть назад на дерево');
+        }
+
+        if (($this->oldRecord->status_id == status::ROTTEN_STATUS && $this->status_id == Status::HANGING_STATUS) ||
+            ($this->oldRecord->status_id == status::ROTTEN_STATUS && $this->status_id == Status::FALL_STATUS)) {
+            $this->addError($attribute, 'Выброси его, оно уже сгнило');
+        }
+    }
+
+    /**
+     * Валидация для целостности
+     *
+     * @param string $attribute
+     * @return void
+     */
+    public function sizeValidate($attribute)
+    {
+        if (!$this->oldRecord) {
+            return true;
+        }
+
+        if ($this->oldRecord->status_id == status::HANGING_STATUS && $this->size < 100) {
+            $this->addError($attribute, 'Сначала яблоко должно упасть');
+        }
+
+        if ($this->oldRecord->status_id == status::ROTTEN_STATUS && $this->oldRecord->size != $this->size) {
+            $this->addError($attribute, 'Фу! Собрался жрать гнилое яблоко!');
+        }
     }
 }

@@ -32,11 +32,11 @@ class StatusLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['old_status_id', 'new_status_id'], 'required'],
-            [['old_status_id', 'new_status_id'], 'integer'],
+            [['apple_id', 'status_id'], 'required'],
+            [['apple_id', 'status_id'], 'integer'],
             [['updatedate'], 'safe'],
-            [['new_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['new_status_id' => 'id']],
-            [['old_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['old_status_id' => 'id']],
+            [['apple_id'], 'exist', 'skipOnError' => true, 'targetClass' => apple::className(), 'targetAttribute' => ['apple_id' => 'id']],
+            [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
         ];
     }
 
@@ -47,8 +47,8 @@ class StatusLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'old_status_id' => 'Старый статус',
-            'new_status_id' => 'Новый статус',
+            'apple_id' => 'ID яблока',
+            'status_id' => 'Статус',
             'updatedate' => 'Дата обновления',
         ];
     }
@@ -58,9 +58,9 @@ class StatusLog extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getNewStatus()
+    public function getStatus()
     {
-        return $this->hasOne(Status::className(), ['id' => 'new_status_id']);
+        return $this->hasOne(Status::className(), ['id' => 'status_id']);
     }
 
     /**
@@ -68,8 +68,8 @@ class StatusLog extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOldStatus()
+    public function getApple()
     {
-        return $this->hasOne(Status::className(), ['id' => 'old_status_id']);
+        return $this->hasOne(Apple::className(), ['id' => 'apple_id']);
     }
 }
