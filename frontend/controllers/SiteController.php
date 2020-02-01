@@ -9,7 +9,11 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\Pagination;
+use yii\helpers\Url;
 use common\models\LoginForm;
+use common\models\Apple;
+use common\models\Status;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -72,9 +76,47 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($page = 1)
     {
-        return $this->render('index');
+        $query = Apple::find();
+        $countQuery = clone $query;
+        $pages = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => 10,
+            'defaultPageSize' => 10,
+    		'pageSizeParam' => false,
+            'page' => $page - 1,
+        ]);
+        $models = $query->orderBy(['id' => SORT_DESC])->offset($pages->offset)->limit($pages->limit)->all();
+
+        if (Yii::$app->request->isPost && Yii::$app->request->post('apple_id')) {
+            $model = Apple::findOne(['id' => Yii::$app->request->post('apple_id')]);
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                $model->save();
+                return $this->redirect([Url::to()]);
+            }
+        }
+
+        return $this->render('index', [
+            'models' => $models,
+            'pages' => $pages,
+        ]);
+    }
+
+    public function actionApplesCreate()
+    {
+        for ($i = 1; $i <= random_int(1, 10); $i++) {
+            Apple::appleCreate();
+        } 
+        return $this->redirect(['/']);
+    }
+
+    public function actionAppleFall($id)
+    {
+        $apple = Apple::findOne(['id' => (int)$id]);
+        $apple->status_id = Status::FALL_STATUS;
+        $apple->save();
+        return $this->redirect(['/']);
     }
 
     /**

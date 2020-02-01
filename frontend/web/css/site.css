@@ -118,3 +118,17 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.apple-form div.progress {
+    margin-top:7px
+}
+
+.apple-form .percent {
+    margin-top:7px;
+    margin-left:0px;
+    padding-left:0px
+}
+
+.apple-form .size-input {
+    width:70px;
+}

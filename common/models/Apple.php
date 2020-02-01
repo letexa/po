@@ -26,6 +26,11 @@ class Apple extends \yii\db\ActiveRecord
     const PERIOD = 1; // месяц
 
     /**
+     * Период, через который яблоко гниет (в часах)
+     */
+    const ROT_PERIOD = 5;
+
+    /**
      * Старые данные модели
      *
      * @var [type]
@@ -56,14 +61,18 @@ class Apple extends \yii\db\ActiveRecord
     {
         parent::afterSave($insert, $changedAttributes);
 
-        /** Запись в лог, если статус был обновлен */ 
-        if ($this->oldRecord && $this->oldRecord->status_id != $this->status_id) {
-            $log = new StatusLog();
-            $log->status_id = $this->status_id;
-            $log->apple_id = $this->id;
-            $log->save();
+        /** Удаление съеденного яблока */
+        if ($this->size <= 0) {
+            $this->delete();
+        } else {
+            /** Запись в лог, если статус был обновлен */ 
+            if ($this->oldRecord && $this->oldRecord->status_id != $this->status_id) {
+                $log = new StatusLog();
+                $log->status_id = $this->status_id;
+                $log->apple_id = $this->id;
+                $log->save();
+            }
         }
-
     }
 
     /**
@@ -163,5 +172,34 @@ class Apple extends \yii\db\ActiveRecord
         if ($this->oldRecord->status_id == status::ROTTEN_STATUS && $this->oldRecord->size != $this->size) {
             $this->addError($attribute, 'Фу! Собрался жрать гнилое яблоко!');
         }
+
+        if ($this->oldRecord->size < $this->size) {
+            $this->addError($attribute, 'Погрызанное яблоко нельзя увеличить');
+        }
+    }
+
+    /**
+     * Создание яблока
+     *
+     * @return void
+     */
+    static public function appleCreate()
+    {
+        $model = new self();
+
+        /** Задаем случайный цвет */ 
+        $model->color_id = random_int(1, Color::find()->count());
+
+        /** Задаем случайную дату появления в определенном диапазоне, 
+         * например в течение месяца
+        */
+        $date_to = new \DateTime();
+        $date_from = new \DateTime();
+        $date_from->modify('-' . $model::PERIOD . ' month');
+        $model->createdate = random_int($date_from->format('U'), $date_to->format('U'));
+        $model->createdate = date('Y-m-d H:i:s', $model->createdate);
+
+        $model->status_id = Status::HANGING_STATUS;
+        return $model->save();
     }
 }

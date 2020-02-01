@@ -53,23 +53,7 @@ class AppleController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Apple();
-
-        /** Задаем случайный цвет */ 
-        $model->color_id = random_int(1, Color::find()->count());
-
-        /** Задаем случайную дату появления в определенном диапазоне, 
-         * например в течение месяца
-        */
-        $date_to = new \DateTime();
-        $date_from = new \DateTime();
-        $date_from->modify('-' . $model::PERIOD . ' month');
-        $model->createdate = random_int($date_from->format('U'), $date_to->format('U'));
-        $model->createdate = date('Y-m-d H:i:s', $model->createdate);
-
-        $model->status_id = Status::HANGING_STATUS;
-        $model->save();
-        
+        Apple::appleCreate();        
         return $this->redirect(['/apple']);
     }
 
@@ -127,4 +111,6 @@ class AppleController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    
 }
