@@ -198,7 +198,7 @@ class Apple extends \yii\db\ActiveRecord
         $date_from->modify('-' . $model::PERIOD . ' month');
         $model->createdate = random_int($date_from->format('U'), $date_to->format('U'));
         $model->createdate = date('Y-m-d H:i:s', $model->createdate);
-
+        $model->size = 100;
         $model->status_id = Status::HANGING_STATUS;
         return $model->save();
     }

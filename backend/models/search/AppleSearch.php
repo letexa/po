@@ -40,7 +40,7 @@ class AppleSearch extends Apple
      */
     public function search($params)
     {
-        $query = Apple::find();
+        $query = Apple::find()->orderBy(['id' => SORT_DESC]);
 
         // add conditions that should always apply here
 
